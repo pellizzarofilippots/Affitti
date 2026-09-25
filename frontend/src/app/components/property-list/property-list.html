@@ -1,0 +1,53 @@
+<div style="padding: 20px; font-family: Arial, sans-serif; max-width: 1000px; margin: 0 auto;">
+  <h2>📢 Pubblicazione e Gestione Annunci Immobiliari</h2>
+
+  <!-- Form Inserimento Annuncio -->
+  <form (ngSubmit)="onSubmit()" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+    <h3>Nuovo Annuncio</h3>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+      <input type="text" [(ngModel)]="newProperty.title" name="title" placeholder="Titolo dell'annuncio (es. Bilo luminoso)" required />
+      <input type="text" [(ngModel)]="newProperty.imageUrl" name="imageUrl" placeholder="URL Immagine (es. https://...)" required />
+      <input type="text" [(ngModel)]="newProperty.address" name="address" placeholder="Indirizzo" required />
+      <input type="text" [(ngModel)]="newProperty.city" name="city" placeholder="Città" required />
+      <input type="number" [(ngModel)]="newProperty.monthlyRent" name="monthlyRent" placeholder="Canone Mensile (€)" required />
+      <input type="number" [(ngModel)]="newProperty.squareMeters" name="squareMeters" placeholder="Superficie (m²)" required />
+    </div>
+
+    <div style="margin-bottom: 10px;">
+      <textarea [(ngModel)]="newProperty.description" name="description" placeholder="Descrizione dettagliata dell'immobile..." style="width: 100%; height: 60px;" required></textarea>
+    </div>
+
+    <div style="display: flex; gap: 10px; align-items: center;">
+      <select [(ngModel)]="newProperty.status" name="status">
+        <option value="AVAILABLE">Disponibile</option>
+        <option value="RENTED">Affittato</option>
+        <option value="MAINTENANCE">In Manutenzione</option>
+      </select>
+      <button type="submit" style="padding: 8px 16px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">Pubblica Annuncio</button>
+    </div>
+  </form>
+
+  <hr />
+
+  <!-- Griglia Annunci -->
+  <h3>Vetrina Immobili</h3>
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top: 20px;">
+    <div *ngFor="let p of properties" style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: white;">
+
+      <img [src]="p.imageUrl || 'https://via.placeholder.com/300x180?text=Nessuna+Foto'" [alt]="p.title" style="width: 100%; height: 180px; object-fit: cover;" />
+
+      <div style="padding: 15px;">
+        <span style="font-size: 12px; font-weight: bold; color: #007bff; text-transform: uppercase;">{{ p.status }}</span>
+        <h4 style="margin: 5px 0 10px 0;">{{ p.title }}</h4>
+        <p style="font-size: 13px; color: #666; margin-bottom: 10px;">📍 {{ p.address }}, {{ p.city }} ({{ p.squareMeters }} m²)</p>
+        <p style="font-size: 13px; color: #444; height: 40px; overflow: hidden;">{{ p.description }}</p>
+
+        <div style="border-top: 1px solid #eee; padding-top: 10px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 18px; font-weight: bold; color: #28a745;">{{ p.monthlyRent }} € / mese</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

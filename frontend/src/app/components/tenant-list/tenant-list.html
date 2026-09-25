@@ -1,0 +1,39 @@
+<div style="padding: 20px; font-family: Arial, sans-serif;">
+  <h2>👥 Anagrafica Inquilini</h2>
+
+  <form (ngSubmit)="onSubmit()" style="background: #f4f4f9; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+    <input type="text" [(ngModel)]="newTenant.firstName" name="firstName" placeholder="Nome" required />
+    <input type="text" [(ngModel)]="newTenant.lastName" name="lastName" placeholder="Cognome" required />
+    <input type="email" [(ngModel)]="newTenant.email" name="email" placeholder="Email" required />
+    <input type="text" [(ngModel)]="newTenant.phoneNumber" name="phoneNumber" placeholder="Telefono" required />
+    <input type="text" [(ngModel)]="newTenant.taxCode" name="taxCode" placeholder="Codice Fiscale" required />
+
+    <button type="submit" style="grid-column: span 2; background: #28a745; color: white; border: none; padding: 8px; cursor: pointer; border-radius: 4px;">
+      Registra Inquilino
+    </button>
+  </form>
+
+  <hr />
+
+  <h3>Inquilini Registrati</h3>
+  <table border="1" cellpadding="8" style="width: 100%; border-collapse: collapse;">
+    <thead>
+    <tr style="background: #eee;">
+      <th>ID</th>
+      <th>Nome e Cognome</th>
+      <th>Email</th>
+      <th>Telefono</th>
+      <th>Codice Fiscale</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let t of tenants">
+      <td>#{{ t.id }}</td>
+      <td><strong>{{ t.firstName }} {{ t.lastName }}</strong></td>
+      <td>{{ t.email }}</td>
+      <td>{{ t.phoneNumber }}</td>
+      <td>{{ t.taxCode }}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>

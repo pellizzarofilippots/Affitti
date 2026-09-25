@@ -1,0 +1,69 @@
+<div style="padding: 20px; font-family: Arial, sans-serif;">
+  <h2>📝 Stipula Nuovi Contratti di Affitto</h2>
+
+  <form (ngSubmit)="onSubmit()" style="background: #eef2f7; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+
+    <div>
+      <label>Seleziona Immobile (Solo Disponibili):</label>
+      <select [(ngModel)]="selectedPropertyId" name="propertyId" required style="width: 100%; padding: 6px;">
+        <option [ngValue]="null">-- Scegli Immobile --</option>
+        <option *ngFor="let p of availableProperties" [value]="p.id">
+          {{ p.address }} ({{ p.city }}) - {{ p.monthlyRent }}€
+        </option>
+      </select>
+    </div>
+
+    <div>
+      <label>Seleziona Inquilino:</label>
+      <select [(ngModel)]="selectedTenantId" name="tenantId" required style="width: 100%; padding: 6px;">
+        <option [ngValue]="null">-- Scegli Inquilino --</option>
+        <option *ngFor="let t of tenants" [value]="t.id">
+          {{ t.firstName }} {{ t.lastName }} ({{ t.taxCode }})
+        </option>
+      </select>
+    </div>
+
+    <div>
+      <label>Data Inizio:</label>
+      <input type="date" [(ngModel)]="newContract.startDate" name="startDate" required style="width: 100%; padding: 6px;" />
+    </div>
+
+    <div>
+      <label>Data Fine:</label>
+      <input type="date" [(ngModel)]="newContract.endDate" name="endDate" required style="width: 100%; padding: 6px;" />
+    </div>
+
+    <div style="grid-column: span 2;">
+      <label>Canone Mensile Convenuto (€):</label>
+      <input type="number" [(ngModel)]="newContract.monthlyRent" name="monthlyRent" required style="width: 100%; padding: 6px;" />
+    </div>
+
+    <button type="submit" style="grid-column: span 2; background: #007bff; color: white; border: none; padding: 10px; cursor: pointer; border-radius: 4px; font-weight: bold;">
+      Stipula Contratto e Genera Rate
+    </button>
+  </form>
+
+  <hr />
+
+  <h3>Contratti Attivi</h3>
+  <table border="1" cellpadding="8" style="width: 100%; border-collapse: collapse;">
+    <thead>
+    <tr style="background: #eee;">
+      <th>ID</th>
+      <th>Immobile</th>
+      <th>Inquilino</th>
+      <th>Durata</th>
+      <th>Canone</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let c of contracts">
+      <td>#{{ c.id }}</td>
+      <td>{{ c.property?.address }} ({{ c.property?.city }})</td>
+      <td>{{ c.tenant?.firstName }} {{ c.tenant?.lastName }}</td>
+      <td>{{ c.startDate }} ➔ {{ c.endDate }}</td>
+      <td><strong>{{ c.monthlyRent }} €</strong></td>
+    </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,34 @@
+<div style="padding: 20px; font-family: Arial, sans-serif;">
+  <h2>💳 Scadenzario Incassi e Rate Mensili</h2>
+
+  <table border="1" cellpadding="8" style="width: 100%; border-collapse: collapse;">
+    <thead>
+    <tr style="background: #f8f9fa;">
+      <th>ID Rata</th>
+      <th>Contratto #</th>
+      <th>Scadenza</th>
+      <th>Importo</th>
+      <th>Stato</th>
+      <th>Azione</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let p of payments">
+      <td>#{{ p.id }}</td>
+      <td>Contratto #{{ p.contract?.id }}</td>
+      <td>{{ p.dueDate }}</td>
+      <td><strong>{{ p.amount }} €</strong></td>
+      <td>
+          <span [style.color]="p.status === 'PAID' ? 'green' : 'orange'" style="font-weight: bold;">
+            {{ p.status === 'PAID' ? 'PAGATO ✅' : 'IN ATTESA ⏳' }}
+          </span>
+      </td>
+      <td>
+        <button *ngIf="p.status !== 'PAID'" (click)="pay(p.id)" style="background: #28a745; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px;">
+          Segna come Incassato
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
