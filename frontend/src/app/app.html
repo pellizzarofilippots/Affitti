@@ -1,12 +1,83 @@
-<div style="padding: 20px;">
-  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
-    <app-property-list></app-property-list>
-    <app-tenant-list></app-tenant-list>
+<div style="padding: 20px; font-family: Arial, sans-serif;">
+
+  <!-- CASO 1: UTENTE NON AUTENTICATO (Form Login / Registrazione) -->
+  <div *ngIf="!currentUser" style="max-width: 400px; margin: 50px auto; padding: 25px; border: 1px solid #ddd; border-radius: 8px; background: #fdfdfd; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+    <h2 style="text-align: center; margin-top: 0;">{{ isRegistering ? 'Crea Account' : 'Accedi' }}</h2>
+
+    <form (ngSubmit)="isRegistering ? onRegister() : onLogin()">
+      <div *ngIf="isRegistering" style="margin-bottom: 12px;">
+        <label style="display: block; font-weight: bold; margin-bottom: 4px;">Nome e Cognome:</label>
+        <input type="text" [(ngModel)]="name" name="name" required style="width: 100%; padding: 8px; box-sizing: border-box;" />
+      </div>
+
+      <div style="margin-bottom: 12px;">
+        <label style="display: block; font-weight: bold; margin-bottom: 4px;">Email:</label>
+        <input type="email" [(ngModel)]="email" name="email" required style="width: 100%; padding: 8px; box-sizing: border-box;" />
+      </div>
+
+      <div style="margin-bottom: 12px;">
+        <label style="display: block; font-weight: bold; margin-bottom: 4px;">Password:</label>
+        <input type="password" [(ngModel)]="password" name="password" required style="width: 100%; padding: 8px; box-sizing: border-box;" />
+      </div>
+
+      <!-- Scelta del ruolo solo in fase di registrazione -->
+      <div *ngIf="isRegistering" style="margin-bottom: 20px;">
+        <label style="display: block; font-weight: bold; margin-bottom: 4px;">Tipo di Account:</label>
+        <select [(ngModel)]="role" name="role" style="width: 100%; padding: 8px; box-sizing: border-box;">
+          <option value="AFFITTUARIO">Affittuario (Cerco casa)</option>
+          <option value="LOCATORE">Locatore (Proprietario / pubblico annunci)</option>
+        </select>
+      </div>
+
+      <button type="submit" style="width: 100%; background: #0d6efd; color: white; border: none; padding: 10px; cursor: pointer; border-radius: 4px; font-size: 16px;">
+        {{ isRegistering ? 'Registrati' : 'Entra' }}
+      </button>
+    </form>
+
+    <p style="margin-top: 15px; text-align: center; font-size: 14px;">
+      <a href="javascript:void(0)" (click)="isRegistering = !isRegistering" style="color: #0d6efd; text-decoration: underline;">
+        {{ isRegistering ? 'Hai già un account? Accedi' : 'Non hai un account? Registrati' }}
+      </a>
+    </p>
   </div>
 
-  <hr style="margin: 20px 0;" />
-  <app-contract-list></app-contract-list>
 
-  <hr style="margin: 20px 0;" />
-  <app-payment-list></app-payment-list>
+  <!-- CASO 2: UTENTE AUTENTICATO -->
+  <div *ngIf="currentUser">
+    <!-- Header profilo -->
+    <div style="display: flex; justify-content: space-between; align-items: center; background: #e9ecef; padding: 12px 20px; border-radius: 6px; margin-bottom: 25px;">
+      <div>
+        👋 Benvenuto, <strong>{{ currentUser.name }}</strong>
+        <span style="background: #17a2b8; color: white; padding: 3px 8px; border-radius: 12px; font-size: 12px; margin-left: 10px;">
+          {{ currentUser.role }}
+        </span>
+      </div>
+      <button (click)="onLogout()" style="background: #dc3545; color: white; border: none; padding: 6px 14px; cursor: pointer; border-radius: 4px;">
+        Logout
+      </button>
+    </div>
+
+    <!-- VISTA LOCATORE: Accesso completo a gestione Immobili, Inquilini, Contratti e Pagamenti -->
+    <div *ngIf="currentUser.role === 'LOCATORE'">
+      <h2>🏠 Pannello di Controllo Proprietario</h2>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
+        <app-property-list></app-property-list>
+        <app-tenant-list></app-tenant-list>
+      </div>
+      <hr style="margin: 30px 0;" />
+      <app-contract-list></app-contract-list>
+      <hr style="margin: 30px 0;" />
+      <app-payment-list></app-payment-list>
+    </div>
+
+    <!-- VISTA AFFITTUARIO: Vetrina annunci per cercare casa -->
+    <div *ngIf="currentUser.role === 'AFFITTUARIO'">
+      <h2>🔍 Cerca il tuo prossimo Immobile</h2>
+      <p style="color: #6c757d;">Sfoglia gli annunci pubblicati dai proprietari.</p>
+
+      <!-- Mostra la lista degli immobili in sola lettura -->
+      <app-property-list></app-property-list>
+    </div>
+  </div>
+
 </div>
