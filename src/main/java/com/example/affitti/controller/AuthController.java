@@ -35,4 +35,15 @@ public class AuthController {
         }
         return ResponseEntity.status(401).body("Credenziali errate");
     }
+
+
+    // NUOVO ENDPOINT: Ritorna i dati dell'utente aggiornati dal DB partendo dall'ID
+    @GetMapping("/me/{id}")
+    public ResponseEntity<?> getCurrentUser(@PathVariable Long id) {
+        Optional<User> userOpt = userRepository.findById(id);
+        if (userOpt.isPresent()) {
+            return ResponseEntity.ok(userOpt.get());
+        }
+        return ResponseEntity.status(404).body("Utente non trovato");
+    }
 }

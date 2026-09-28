@@ -1,18 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router'; // <-- 1. IMPORTA RouterLink
+
 import { PropertyService } from '../../services/property.service';
+import { AuthService } from '../../services/auth.service';
 import { Property } from '../../models/property';
 
 @Component({
   selector: 'app-property-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    RouterLink // <-- 2. AGGIUNGILO QUI
+  ],
   templateUrl: './property-list.html',
   styleUrl: './property-list.css'
 })
 export class PropertyListComponent implements OnInit {
-  properties: Property[] = [];
+  properties = signal<Property[]>([]);
   newProperty: Property = {
     title: '',
     description: '',
@@ -24,7 +29,11 @@ export class PropertyListComponent implements OnInit {
     status: 'AVAILABLE'
   };
 
-  constructor(private propertyService: PropertyService) {}
+  constructor(
+    private propertyService: PropertyService,
+    public authService: AuthService
+
+  ) {}
 
   ngOnInit(): void {
     this.loadProperties();
@@ -32,10 +41,13 @@ export class PropertyListComponent implements OnInit {
 
   loadProperties(): void {
     this.propertyService.getProperties().subscribe({
-      next: (data) => this.properties = data,
-      error: (err) => console.error('Errore nel recupero dati:', err)
+      next: (data) => {
+        // Aggiorniamo il signal: l'HTML si aggiornerà DA SOLO all'istante
+        this.properties.set(data);
+      }
     });
   }
+
   onSubmit(): void {
     this.propertyService.createProperty(this.newProperty).subscribe({
       next: () => {

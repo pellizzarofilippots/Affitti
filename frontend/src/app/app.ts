@@ -1,73 +1,29 @@
-import { Component, signal, inject, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-
-import { PropertyListComponent } from './components/property-list/property-list';
-import { TenantListComponent } from './components/tenant-list/tenant-list';
-import { ContractListComponent } from './components/contract-list/contract-list';
-import { PaymentListComponent } from './components/payment-list/payment-list';
+import { RouterOutlet } from '@angular/router';
 import { AuthService, User } from './services/auth.service';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    PropertyListComponent,
-    TenantListComponent,
-    ContractListComponent,
-    PaymentListComponent
-  ],
+  imports: [CommonModule, RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App implements OnInit {
-  protected readonly title = signal('frontend');
-  private authService = inject(AuthService);
+export class AppComponent implements OnInit {
+  // Observable per l'HTML
+  currentUser$: Observable<User | null>;
 
-  currentUser: User | null = null;
-  isRegistering = true;
-
-  // Campi per il Form
-  name = '';
-  email = '';
-  password = '';
-  role: 'LOCATORE' | 'AFFITTUARIO' = 'AFFITTUARIO';
+  constructor(public authService: AuthService) {
+    this.currentUser$ = this.authService.currentUser$;
+  }
 
   ngOnInit(): void {
-    this.currentUser = this.authService.getCurrentUser();
+
   }
 
-  onRegister(): void {
-    const newUser: User = {
-      name: this.name,
-      email: this.email,
-      password: this.password,
-      role: this.role
-    };
-
-    this.authService.register(newUser).subscribe({
-      next: (user) => {
-        this.authService.setCurrentUser(user);
-        this.currentUser = user;
-      },
-      error: (err) => alert('Errore registrazione: ' + (err.error || 'Server non raggiungibile'))
-    });
-  }
-
-  onLogin(): void {
-    this.authService.login({ email: this.email, password: this.password }).subscribe({
-      next: (user) => {
-        this.authService.setCurrentUser(user);
-        this.currentUser = user;
-      },
-      error: () => alert('Credenziali non valide')
-    });
-  }
-
-  onLogout(): void {
+  logout(): void {
     this.authService.logout();
-    this.currentUser = null;
   }
 }

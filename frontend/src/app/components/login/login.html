@@ -1,0 +1,25 @@
+<div style="max-width: 400px; margin: 50px auto; padding: 25px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-family: sans-serif;">
+  <h2 style="margin-top: 0; text-align: center;">Accedi al Gestionale</h2>
+
+  <form (ngSubmit)="onLogin()" style="display: flex; flex-direction: column; gap: 15px;">
+    <div>
+      <label style="font-size: 13px; font-weight: bold; color: #555;">Email</label>
+      <input type="email" [(ngModel)]="credentials.email" name="email" required placeholder="mario@example.com"
+             style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box; margin-top: 5px;" />
+    </div>
+
+    <div>
+      <label style="font-size: 13px; font-weight: bold; color: #555;">Password</label>
+      <input type="password" [(ngModel)]="credentials.password" name="password" required placeholder="••••••••"
+             style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box; margin-top: 5px;" />
+    </div>
+
+    <div *ngIf="errorMessage" style="color: #dc3545; font-size: 13px;">
+      {{ errorMessage }}
+    </div>
+
+    <button type="submit" style="padding: 12px; background: #007bff; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px;">
+      Accedi
+    </button>
+  </form>
+</div>

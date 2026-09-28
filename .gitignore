@@ -1,45 +1,28 @@
-HELP.md
+# Maven & Build output
 target/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+*.log
 
-### STS ###
-.apt_generated
+# Node & Angular (esclude solo dipendenze e build, traccia tutto il codice src)
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+node_modules/
+dist/
+.angular/
+
+# Eclipse & NetBeans
 .classpath
-.factorypath
 .project
-.settings
-.springBeans
-.sts4-cache
+.settings/
+.factorypath
+/nbproject/private/
+/nbbuild/
 
-### IntelliJ IDEA ###
-.idea
+# IntelliJ IDEA (Escludiamo solo i file temporanei della workspace, mantenendo vcs.xml per Git)
+.idea/workspace.xml
+.idea/usage.statistics.xml
+.idea/dictionaries/
+.idea/shelf/
 *.iws
 *.iml
 *.ipr
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### VS Code ###
-.vscode/
-
-
-# Java / Maven / IntelliJ
-target/
-.idea/
-*.iml
-*.log
-
-# Node / Angular
-**/node_modules/
-**/dist/
-**/.angular/

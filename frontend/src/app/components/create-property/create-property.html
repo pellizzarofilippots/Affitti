@@ -1,0 +1,211 @@
+<div class="form-container">
+  <div class="form-header">
+    <a routerLink="/dashboard" class="back-link">←</a>
+    <h2>Nuovo Annuncio di Affitto</h2>
+  </div>
+
+  <form #propertyForm="ngForm" (ngSubmit)="onSubmit(propertyForm)" class="property-form" novalidate>
+
+    <!-- Titolo -->
+    <div class="form-group">
+      <label>Titolo Annuncio *</label>
+      <input
+        type="text"
+        [(ngModel)]="newProperty.title"
+        name="title"
+        #title="ngModel"
+        placeholder="es. Luminoso Bilocale ristrutturato in Centro"
+        required
+        minlength="5"
+        [class.is-invalid]="title.invalid && (title.touched || submitted)" />
+      <span class="error-msg" *ngIf="title.invalid && (title.touched || submitted)">
+        <span *ngIf="title.errors?.['required']">Il titolo è obbligatorio.</span>
+        <span *ngIf="title.errors?.['minlength']">Il titolo deve contenere almeno 5 caratteri.</span>
+      </span>
+    </div>
+
+    <!-- Tipologia e Superficie -->
+    <div class="form-row">
+      <div class="form-group flex-1">
+        <label>Tipologia Immobile *</label>
+        <select [(ngModel)]="newProperty.propertyType" name="propertyType" required>
+          <option value="Monolocale">Monolocale</option>
+          <option value="Bilocale">Bilocale</option>
+          <option value="Trilocale">Trilocale</option>
+          <option value="Quadrilocale">Quadrilocale+</option>
+          <option value="Attico">Attico</option>
+          <option value="Villa">Villa / Villetta</option>
+        </select>
+      </div>
+
+      <div class="form-group flex-1">
+        <label>Superficie (m²) *</label>
+        <input
+          type="number"
+          [(ngModel)]="newProperty.squareMeters"
+          name="squareMeters"
+          #squareMeters="ngModel"
+          placeholder="65"
+          required
+          min="1"
+          [class.is-invalid]="squareMeters.invalid && (squareMeters.touched || submitted)" />
+        <span class="error-msg" *ngIf="squareMeters.invalid && (squareMeters.touched || submitted)">
+          Inserisci una superficie valida (> 0 m²).
+        </span>
+      </div>
+    </div>
+
+    <!-- Localizzazione -->
+    <div class="form-row">
+      <div class="form-group flex-2">
+        <label>Indirizzo *</label>
+        <input
+          type="text"
+          [(ngModel)]="newProperty.address"
+          name="address"
+          #address="ngModel"
+          placeholder="Via Roma, 10"
+          required
+          [class.is-invalid]="address.invalid && (address.touched || submitted)" />
+        <span class="error-msg" *ngIf="address.invalid && (address.touched || submitted)">
+          L'indirizzo è obbligatorio.
+        </span>
+      </div>
+
+      <div class="form-group flex-1">
+        <label>Città *</label>
+        <input
+          type="text"
+          [(ngModel)]="newProperty.city"
+          name="city"
+          #city="ngModel"
+          placeholder="Milano"
+          required
+          [class.is-invalid]="city.invalid && (city.touched || submitted)" />
+        <span class="error-msg" *ngIf="city.invalid && (city.touched || submitted)">
+          La città è obbligatoria.
+        </span>
+      </div>
+    </div>
+
+    <!-- Prezzo e Condizioni -->
+    <div class="form-row">
+      <div class="form-group flex-1">
+        <label>Canone Mensile (€) *</label>
+        <input
+          type="number"
+          [(ngModel)]="newProperty.monthlyRent"
+          name="monthlyRent"
+          #monthlyRent="ngModel"
+          placeholder="800"
+          required
+          min="1"
+          [class.is-invalid]="monthlyRent.invalid && (monthlyRent.touched || submitted)" />
+        <span class="error-msg" *ngIf="monthlyRent.invalid && (monthlyRent.touched || submitted)">
+          Inserisci un canone valido.
+        </span>
+      </div>
+
+      <div class="form-group flex-1">
+        <label>Spese Condominiali (€/mese)</label>
+        <input type="number" [(ngModel)]="newProperty.condoFees" name="condoFees" placeholder="80" min="0" />
+      </div>
+
+      <div class="form-group flex-1">
+        <label>Deposito Cauzionale (€)</label>
+        <input type="number" [(ngModel)]="newProperty.deposit" name="deposit" placeholder="1600" min="0" />
+      </div>
+    </div>
+
+    <!-- Camere, Bagni e Disponibilità -->
+    <div class="form-row">
+      <div class="form-group flex-1">
+        <label>Locali / Camere</label>
+        <input type="number" [(ngModel)]="newProperty.rooms" name="rooms" min="1" />
+      </div>
+      <div class="form-group flex-1">
+        <label>Bagni</label>
+        <input type="number" [(ngModel)]="newProperty.bathrooms" name="bathrooms" min="1" />
+      </div>
+      <div class="form-group flex-1">
+        <label>Disponibile da</label>
+        <input type="date" [(ngModel)]="newProperty.availableFrom" name="availableFrom" />
+      </div>
+    </div>
+
+    <!-- Dotazioni -->
+    <div class="form-group">
+      <label>Dotazioni e Servizi</label>
+      <div class="checkbox-grid">
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="newProperty.isFurnished" name="isFurnished" />
+          Arredato
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="newProperty.hasElevator" name="hasElevator" />
+          Ascensore
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="newProperty.hasBalcony" name="hasBalcony" />
+          Balcone / Terrazzo
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="newProperty.petsAllowed" name="petsAllowed" />
+          Animali Ammessi
+        </label>
+      </div>
+    </div>
+
+    <!-- Upload Immagini -->
+    <div class="form-group">
+      <label>Foto dell'Immobile *</label>
+      <div
+        class="dropzone"
+        [class.dropzone-invalid]="imageError"
+        (click)="fileInput.click()"
+        (dragover)="onDragOver($event)"
+        (drop)="onFileDrop($event)">
+        <input #fileInput type="file" (change)="onFileSelected($event)" multiple accept="image/*" style="display: none;" />
+        <div class="dropzone-text">
+          <span class="upload-icon">📷</span>
+          <p>Trascina qui le foto oppure <strong>sfoglia</strong></p>
+        </div>
+      </div>
+      <span class="error-msg" *ngIf="imageError">
+        È obbligatorio caricare almeno una foto dell'immobile.
+      </span>
+
+      <!-- Anteprima immagini -->
+      <div *ngIf="imagePreviews.length > 0" class="preview-grid">
+        <div *ngFor="let preview of imagePreviews; let i = index" class="preview-item">
+          <img [src]="preview" alt="Anteprima" />
+          <button type="button" class="btn-remove" (click)="removeImage(i)">✕</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Descrizione -->
+    <div class="form-group">
+      <label>Descrizione Dettagliata *</label>
+      <textarea
+        [(ngModel)]="newProperty.description"
+        name="description"
+        #description="ngModel"
+        rows="4"
+        placeholder="Descrivi l'immobile, la zona e le caratteristiche principali..."
+        required
+        minlength="20"
+        [class.is-invalid]="description.invalid && (description.touched || submitted)"></textarea>
+      <span class="error-msg" *ngIf="description.invalid && (description.touched || submitted)">
+        <span *ngIf="description.errors?.['required']">La descrizione è obbligatoria.</span>
+        <span *ngIf="description.errors?.['minlength']">Inserisci almeno 20 caratteri.</span>
+      </span>
+    </div>
+
+    <!-- Pulsante Sempre Cliccabile -->
+    <button type="submit" class="btn-submit">
+      Pubblica Annuncio
+    </button>
+
+  </form>
+</div>
